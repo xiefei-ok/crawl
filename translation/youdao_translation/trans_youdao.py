@@ -84,14 +84,17 @@ class Youdao():
         response = requests.post(self.url, headers=self.header, cookies=self.cookies, params=self.params, data=data)
         result = response.json()['translateResult'][0][0]['tgt']
         if 'smartResult' in response.json().keys():
-            print('翻译成功')
+            print('翻译成功', '*'*50)
             smart_result = [i.strip() for i in response.json()['smartResult']['entries'] if i.strip()]
-            print(result, '\n', smart_result)
+            print(result, '\n智能引申', '*'*50)
+            for i in smart_result:
+                print(i)
         else:
-            print('翻译成功')
+            print('翻译成功', '*'*50)
             print(result)
 
 
 if __name__ == '__main__':
-    youdao = Youdao('做核酸')
+    input_str = input('please input：')
+    youdao = Youdao(str(input_str))
     youdao.main()
