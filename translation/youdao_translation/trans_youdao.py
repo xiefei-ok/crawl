@@ -12,6 +12,7 @@ import random
 import requests
 import time
 import hashlib
+import execjs
 
 
 class Youdao():
@@ -52,19 +53,32 @@ class Youdao():
         :return: bv, ts, salt, sign
         """
         ua = self.header["User-Agent"]
+        # 对UA进行MD5加密
         bv = hashlib.md5(ua.encode('utf-8')).hexdigest()
+        # time stamp
         ts = str(int(time.time() * 1000))
+        # 类似加盐操作，时间戳加上一个0到10的随机整数
         salt = ts + str(random.randint(0, 10))
+        # md5（前固定字符+输入字符+经处理的时间戳变量+后固定字符）
         sign = hashlib.md5(("fanyideskweb" + self.words + salt + "Ygy_4c=r#e#4EX^NUGUc5").encode('utf-8')).hexdigest()
         return bv, ts, salt, sign
 
-    def getparams_byjs(self):
-        pass
+    def getparams_by_javascript(self):
+        """
+        调用js文件
+        :return:
+        """
+        with open('youdao.js', 'r', encoding='utf-8')as f:
+            youdao_js = f.read()
+        params = execjs.compile(youdao_js).call('get_data', self.words, self.header["User-Agent"])
+        return params.bv, params.ts, params.salt, params.sign
 
     def main(self):
 
         words = self.words
-        bv, lts, salt, sign = self.getparam_python()
+        # 选择两种解密方法
+        # bv, lts, salt, sign = self.getparam_python()
+        bv, lts, salt, sign = self.getparams_by_javascript()
         data = {
             "i": words,
             "from": "AUTO",
