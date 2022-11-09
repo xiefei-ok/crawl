@@ -18,4 +18,4 @@ function  get_data(query, ua){
 // query = 'name'
 //
 // a = get_data(query,ua)
-// console.log(a.ts)
+// console.log(a)

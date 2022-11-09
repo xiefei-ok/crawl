@@ -71,7 +71,7 @@ class Youdao():
         with open('youdao.js', 'r', encoding='utf-8')as f:
             youdao_js = f.read()
         params = execjs.compile(youdao_js).call('get_data', self.words, self.header["User-Agent"])
-        return params.bv, params.ts, params.salt, params.sign
+        return params['bv'], params['ts'], params['salt'], params['sign']
 
     def main(self):
 
