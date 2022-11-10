@@ -55,7 +55,9 @@ class Baidu():
         with open('baidu.js', 'r', encoding='utf-8') as f:
             baidu_js = f.read()
         sign = execjs.compile(baidu_js).call('e', self.query)
-        print(sign)
+        asctoken = execjs.compile(baidu_js).call('ascToken', self.url)
+        self.headers['Acs-Token'] = asctoken
+        print(sign, asctoken)
         data = {
             "from": self.params['from'],
             "to": self.params['to'],
