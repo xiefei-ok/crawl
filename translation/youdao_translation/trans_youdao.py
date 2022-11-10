@@ -76,7 +76,7 @@ class Youdao():
     def main(self):
 
         words = self.words
-        # 选择两种解密方法
+        # 选择一种解密方法
         # bv, lts, salt, sign = self.getparam_python()
         bv, lts, salt, sign = self.getparams_by_javascript()
         data = {
