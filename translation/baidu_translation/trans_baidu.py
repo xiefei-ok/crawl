@@ -6,11 +6,10 @@
 # Time       ：2022/11/9 16:52
 # Author     ：Flynn
 # version    ：python 3
-# Description：
+# Description： 对百度翻译平台的破解代码，支持中译英、英译中，session的问题暂未解决，如cookie失效可抓包使用临时cookie
 """
 
 
-# 未完成代码，acs token 已经破解
 # 1.第一次请求会得到token值  https://fanyi.baidu.com/
 import requests
 import execjs
@@ -82,7 +81,6 @@ class Baidu():
         return data
 
     def main(self):
-
         s = session.get(self.index_url, headers=self.headers)
         # print(s.text)
         # print(session.cookies.get_dict())
