@@ -834,5 +834,5 @@ function ascToken(translate_url){
     return '1660546809505_' + ae + '_' + window.aes_encrypt(a2, a0, a1);
 }
 
-// ascToken参数
+// ascToken参数破解代码参考自k哥爬虫GitHub
 console.log(ascToken("https://fanyi.baidu.com/#zh/en/%E6%B5%8B%E8%AF%95"));
