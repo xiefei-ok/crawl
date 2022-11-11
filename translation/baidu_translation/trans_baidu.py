@@ -10,7 +10,7 @@
 """
 
 
-# 未完成代码，acs token 待破解
+# 未完成代码，acs token 已经破解
 # 1.第一次请求会得到token值  https://fanyi.baidu.com/
 import requests
 import execjs
@@ -41,11 +41,22 @@ class Baidu():
         }
         self.index_url = "https://fanyi.baidu.com/"
         self.url = "https://fanyi.baidu.com/v2transapi"
-        # 语言检测
-        self.params = {
-            "from": "en",
-            "to": "zh"
-        }
+        # 语言检测 - 全英文
+        if query.replace(' ', '').encode('utf-8').isalpha():
+            print('输入为英文', '*'*50, '\n')
+            self.params = {
+                "from": "en",
+                "to": "zh"
+            }
+        # 语言检测 - 全中文
+        elif True in [True if '\u4e00' <= i <= '\u9fff' else False for i in query]:
+            print('输入为中文', '*'*50, '\n')
+            self.params = {
+                "from": "zh",
+                "to": "en"
+            }
+        else:
+            print('混杂字符，拒绝翻译')
 
     def get_data_by_javascript(self):
         """
@@ -57,7 +68,7 @@ class Baidu():
         sign = execjs.compile(baidu_js).call('e', self.query)
         asctoken = execjs.compile(baidu_js).call('ascToken', self.url)
         self.headers['Acs-Token'] = asctoken
-        print(sign, asctoken)
+        # print(sign, asctoken)
         data = {
             "from": self.params['from'],
             "to": self.params['to'],
@@ -73,8 +84,8 @@ class Baidu():
     def main(self):
 
         s = session.get(self.index_url, headers=self.headers)
-        print(s.text)
-        print(session.cookies.get_dict())
+        # print(s.text)
+        # print(session.cookies.get_dict())
         data = self.get_data_by_javascript()
         cookies = {
             "BAIDUID": "8FE65EF4565898CCEBAC3325FC9B1B6C:FG=1",
@@ -94,9 +105,16 @@ class Baidu():
         }
         response = requests.post(self.url, headers=self.headers, params=self.params, data=data, cookies=cookies)
         # response = session.post(self.url, headers=self.headers, params=self.params, data=data)
-        print(response.json())
+        result = response.json()
+        result_a = result['trans_result']['data'][0]['dst']
+        result_b = result['dict_result']['simple_means']['symbols'][0]['parts']
+        print(result_a, '\n')
+        for parts in result_b:
+            print(parts['part'], parts['means'][0])
+
 
 if __name__ == '__main__':
-    baidu = Baidu('nice')
+    input_query = input('请输入：')
+    baidu = Baidu(input_query)
     baidu.main()
 
