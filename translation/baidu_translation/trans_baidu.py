@@ -105,10 +105,15 @@ class Baidu():
         # response = session.post(self.url, headers=self.headers, params=self.params, data=data)
         result = response.json()
         result_a = result['trans_result']['data'][0]['dst']
-        result_b = result['dict_result']['simple_means']['symbols'][0]['parts']
         print(result_a, '\n')
-        for parts in result_b:
-            print(parts['part'], parts['means'][0])
+        if self.params['from'] == 'en':
+            result_b = result['dict_result']['simple_means']['symbols'][0]['parts']
+            for parts in result_b:
+                print(parts['part'], parts['means'][0])
+        elif self.params['from'] == 'zh':
+            result_b = result['dict_result']['simple_means']['word_means']
+            for words in result_b:
+                print(words)
 
 
 if __name__ == '__main__':
