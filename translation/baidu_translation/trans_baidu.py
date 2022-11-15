@@ -13,7 +13,6 @@
 # 1.第一次请求会得到token值  https://fanyi.baidu.com/
 import requests
 import execjs
-session = requests.session()
 
 
 class Baidu():
@@ -81,9 +80,6 @@ class Baidu():
         return data
 
     def main(self):
-        s = session.get(self.index_url, headers=self.headers)
-        # print(s.text)
-        # print(session.cookies.get_dict())
         data = self.get_data_by_javascript()
         cookies = {
             "BAIDUID": "8FE65EF4565898CCEBAC3325FC9B1B6C:FG=1",
@@ -102,10 +98,10 @@ class Baidu():
             "ab_sr": "1.0.1_NDU2YTdmNWFiYTQ4OTM1YzdkMDg5ZjExOTc2MzY0MTBhMDUyZDY0NDY1YTAyNDkxMTVjYWY0MDFmNDBhN2M2Y2E5ODBkYjQ5NDdmNWJiOTFiNDAxNDEyMWJlZWRmNTA0N2ZjMzk3MDk0MzI5OTliMDhmYWM3MTcwODYwODUxYWM0MzI3ZDdiZmFjN2NiNzJjODc0NzkwNmVmMDAyY2E5Zg=="
         }
         response = requests.post(self.url, headers=self.headers, params=self.params, data=data, cookies=cookies)
-        # response = session.post(self.url, headers=self.headers, params=self.params, data=data)
         result = response.json()
         result_a = result['trans_result']['data'][0]['dst']
         print(result_a, '\n')
+        # 常规用词 有拓展翻译词表  非常规可能会报错，修改json解析语句即可
         if self.params['from'] == 'en':
             result_b = result['dict_result']['simple_means']['symbols'][0]['parts']
             for parts in result_b:
